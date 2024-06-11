@@ -40,7 +40,7 @@ function loadDocuments() {
                 <td>
                     ${doc.actions.map(action => `
                         <div>
-                            <p>${action.actionName} (Deadline: ${new Date(action.deadline).toLocaleDateString()}, Pending: ${new Date(action.pendingDate).toLocaleDateString()})</p>
+                            <p>${action.actionName} (Deadline: ${new Date(action.deadline).toLocaleDateString()} ${action.deadlineTime}, Pending: ${new Date(action.pendingDate).toLocaleDateString()})</p>
                             ${action.actionPdfPath ? `<a href="${action.actionPdfPath}" target="_blank">View Action PDF</a>` : ''}
                         </div>
                     `).join('')}
@@ -58,8 +58,8 @@ function loadDocuments() {
 function getReminder(actions) {
     const now = new Date();
     const reminders = actions.map(action => {
-        const deadline = new Date(action.deadline);
-        const timeDiff = deadline - now;
+        const deadlineDateTime = new Date(`${action.deadline}T${action.deadlineTime}`);
+        const timeDiff = deadlineDateTime - now;
         const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
         if (daysRemaining <= 10) {
             return `<span class="reminder">${daysRemaining} days remaining</span>`;
